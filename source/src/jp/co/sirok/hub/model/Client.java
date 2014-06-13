@@ -32,7 +32,7 @@ public class Client extends Model {
 		params.put("applicationId", applicationId);
 		params.put("secret", secret);
 
-		JSONObject jsonObject = HttpClient.sharedInstance().post("1/clients", params);
+		JSONObject jsonObject = HttpClient.getInstance().post("1/clients", params);
 		if (jsonObject == null)
 			return null;
 

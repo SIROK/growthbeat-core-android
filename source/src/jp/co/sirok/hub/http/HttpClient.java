@@ -37,7 +37,7 @@ public class HttpClient {
 		HttpConnectionParams.setSoTimeout(apacheHttpClient.getParams(), TIMEOUT);
 	}
 
-	public static final HttpClient sharedInstance() {
+	public static final HttpClient getInstance() {
 		return instance;
 	}
 
