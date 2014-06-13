@@ -1,0 +1,51 @@
+package jp.co.sirok.hub;
+
+import android.util.Log;
+
+public class Logger {
+
+	private static final String TAG = "Hub";
+	private boolean debug = false;
+
+	public Logger() {
+		super();
+	}
+
+	public Logger(boolean debug) {
+		this();
+		setDebug(debug);
+	}
+
+	public void debug(String message) {
+
+		if (debug)
+			Log.d(TAG, message);
+
+	}
+
+	public void info(String message) {
+
+		if (debug)
+			Log.i(TAG, message);
+
+	}
+
+	public void warning(String message) {
+
+		if (debug)
+			Log.w(TAG, message);
+
+	}
+
+	public void error(String message) {
+
+		if (debug)
+			Log.e(TAG, message);
+
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+
+}
