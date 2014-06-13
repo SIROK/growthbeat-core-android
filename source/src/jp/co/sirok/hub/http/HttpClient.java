@@ -49,6 +49,11 @@ public class HttpClient {
 		this.baseUrl = baseUrl;
 	}
 
+	public JSONObject get(final String api, Map<String, Object> params) {
+		// TODO implemenet
+		return null;
+	}
+
 	public JSONObject post(final String api, Map<String, Object> params) {
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -81,6 +86,11 @@ public class HttpClient {
 
 		return request(put);
 
+	}
+
+	public JSONObject delete(final String api, Map<String, Object> params) {
+		// TODO implemenet
+		return null;
 	}
 
 	private JSONObject request(final HttpUriRequest httpRequest) {
