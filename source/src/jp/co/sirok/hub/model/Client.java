@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.co.sirok.hub.http.HttpClient;
 import jp.co.sirok.hub.utils.DateUtils;
 import jp.co.sirok.hub.utils.JSONObjectUtils;
 
@@ -25,16 +26,18 @@ public class Client extends Model {
 		super(jsonObject);
 	}
 
-	public Client create(String applicationId, String secret) {
+	public static Client create(String applicationId, String secret) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("applicationId", applicationId);
 		params.put("secret", secret);
-		JSONObject jsonObject = post("1/clients", params);
-		if (jsonObject != null)
-			setJsonObject(jsonObject);
 
-		return this;
+		JSONObject jsonObject = HttpClient.sharedInstance().post("1/clients", params);
+		if (jsonObject == null)
+			return null;
+
+		return new Client(jsonObject);
+
 	}
 
 	public String getId() {
