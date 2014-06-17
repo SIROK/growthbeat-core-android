@@ -1,10 +1,10 @@
-package jp.co.sirok.hub;
+package com.growthbeat;
 
 import android.util.Log;
 
 public class Logger {
 
-	private static final String TAG = "Hub";
+	private static final String TAG = "Growthbeat";
 	private boolean debug = false;
 
 	public Logger() {

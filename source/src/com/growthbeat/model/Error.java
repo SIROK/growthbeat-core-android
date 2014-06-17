@@ -1,9 +1,9 @@
-package jp.co.sirok.hub.model;
-
-import jp.co.sirok.hub.utils.JSONObjectUtils;
+package com.growthbeat.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.growthbeat.utils.JSONObjectUtils;
 
 public class Error {
 

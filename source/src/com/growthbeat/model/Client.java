@@ -1,15 +1,15 @@
-package jp.co.sirok.hub.model;
+package com.growthbeat.model;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.co.sirok.hub.http.HttpClient;
-import jp.co.sirok.hub.utils.DateUtils;
-import jp.co.sirok.hub.utils.JSONObjectUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.growthbeat.http.HttpClient;
+import com.growthbeat.utils.DateUtils;
+import com.growthbeat.utils.JSONObjectUtils;
 
 public class Client extends Model {
 

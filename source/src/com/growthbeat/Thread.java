@@ -1,4 +1,4 @@
-package jp.co.sirok.hub;
+package com.growthbeat;
 
 public class Thread extends java.lang.Thread {
 
@@ -25,7 +25,7 @@ public class Thread extends java.lang.Thread {
 				String message = "Uncaught Exception: " + e.getClass().getName();
 				if (e.getMessage() != null)
 					message += "; " + e.getMessage();
-				Hub.getInstance().getLogger().warning(message);
+				Growthbeat.getInstance().getLogger().warning(message);
 			}
 		});
 

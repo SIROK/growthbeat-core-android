@@ -1,4 +1,4 @@
-package jp.co.sirok.hub.model;
+package com.growthbeat.model;
 
 import org.json.JSONObject;
 

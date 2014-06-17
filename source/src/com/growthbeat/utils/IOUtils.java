@@ -1,4 +1,4 @@
-package jp.co.sirok.hub.utils;
+package com.growthbeat.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

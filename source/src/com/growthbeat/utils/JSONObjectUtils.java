@@ -1,4 +1,4 @@
-package jp.co.sirok.hub.utils;
+package com.growthbeat.utils;
 
 import org.json.JSONObject;
 

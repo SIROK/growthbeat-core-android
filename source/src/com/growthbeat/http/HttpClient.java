@@ -1,4 +1,4 @@
-package jp.co.sirok.hub.http;
+package com.growthbeat.http;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,10 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import jp.co.sirok.hub.HubException;
-import jp.co.sirok.hub.model.Error;
-import jp.co.sirok.hub.utils.IOUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,6 +19,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.growthbeat.GrowthbeatException;
+import com.growthbeat.model.Error;
+import com.growthbeat.utils.IOUtils;
 
 public class HttpClient {
 
@@ -99,7 +99,7 @@ public class HttpClient {
 		try {
 			httpResponse = apacheHttpClient.execute(httpRequest);
 		} catch (IOException e) {
-			throw new HubException("Feiled to execute HTTP request. " + e.getMessage(), e);
+			throw new GrowthbeatException("Feiled to execute HTTP request. " + e.getMessage(), e);
 		}
 
 		JSONObject jsonObject = null;
@@ -108,21 +108,21 @@ public class HttpClient {
 			String json = IOUtils.toString(inputStream);
 			jsonObject = new JSONObject(json);
 		} catch (IOException e) {
-			throw new HubException("Failed to read HTTP response. " + e.getMessage(), e);
+			throw new GrowthbeatException("Failed to read HTTP response. " + e.getMessage(), e);
 		} catch (JSONException e) {
-			throw new HubException("Failed to parse response JSON. " + e.getMessage(), e);
+			throw new GrowthbeatException("Failed to parse response JSON. " + e.getMessage(), e);
 		} finally {
 			try {
 				httpResponse.getEntity().consumeContent();
 			} catch (IOException e) {
-				throw new HubException("Failed to close connection. " + e.getMessage(), e);
+				throw new GrowthbeatException("Failed to close connection. " + e.getMessage(), e);
 			}
 		}
 
 		int statusCode = httpResponse.getStatusLine().getStatusCode();
 		if (statusCode < 200 || statusCode >= 300) {
 			Error error = new Error(jsonObject);
-			throw new HubException(error.getMessage());
+			throw new GrowthbeatException(error.getMessage());
 		}
 
 		return jsonObject;

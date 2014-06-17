@@ -1,22 +1,22 @@
-package jp.co.sirok.hub;
+package com.growthbeat;
 
-import jp.co.sirok.hub.http.HttpClient;
-import jp.co.sirok.hub.model.Client;
+import com.growthbeat.http.HttpClient;
+import com.growthbeat.model.Client;
 
-public class Hub {
+public class Growthbeat {
 
-	private static final Hub instance = new Hub();
+	private static final Growthbeat instance = new Growthbeat();
 	private static final String DEFAULT_BASE_URL = "http://api.localhost:8085/";
 
 	private final Logger logger = new Logger();
 	private String secret;
 	private Client client;
 
-	private Hub() {
+	private Growthbeat() {
 		HttpClient.getInstance().setBaseUrl(DEFAULT_BASE_URL);
 	}
 
-	public static Hub getInstance() {
+	public static Growthbeat getInstance() {
 		return instance;
 	}
 
@@ -30,8 +30,8 @@ public class Hub {
 
 			@Override
 			public void run() {
-				Hub.this.client = Client.create(applicationId, secret);
-				Hub.this.logger.info(String.format("client created (id:%s)", Hub.this.client.getId()));
+				Growthbeat.this.client = Client.create(applicationId, secret);
+				Growthbeat.this.logger.info(String.format("client created (id:%s)", Growthbeat.this.client.getId()));
 			}
 		}).start();
 
