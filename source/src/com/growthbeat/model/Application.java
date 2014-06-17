@@ -11,32 +11,18 @@ import com.growthbeat.http.HttpClient;
 import com.growthbeat.utils.DateUtils;
 import com.growthbeat.utils.JSONObjectUtils;
 
-public class Client extends Model {
+public class Application extends Model {
 
 	private String id;
+	private String name;
 	private Date created;
-	private Application application;
 
-	public Client() {
+	public Application() {
 		super();
 	}
 
-	public Client(JSONObject jsonObject) {
+	public Application(JSONObject jsonObject) {
 		super(jsonObject);
-	}
-
-	public static Client create(String applicationId, String secret) {
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("applicationId", applicationId);
-		params.put("secret", secret);
-
-		JSONObject jsonObject = HttpClient.getInstance().post("1/clients", params);
-		if (jsonObject == null)
-			return null;
-
-		return new Client(jsonObject);
-
 	}
 
 	public String getId() {
@@ -47,6 +33,14 @@ public class Client extends Model {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Date getCreated() {
 		return created;
 	}
@@ -55,21 +49,13 @@ public class Client extends Model {
 		this.created = created;
 	}
 
-	public Application getApplication() {
-		return application;
-	}
-
-	public void setApplication(Application application) {
-		this.application = application;
-	}
-
 	public JSONObject getJsonObject() {
 
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("id", getId());
+			jsonObject.put("name", getName());
 			jsonObject.put("created", DateUtils.formatToDateTimeString(getCreated()));
-			jsonObject.put("application", application.getJsonObject());
 		} catch (JSONException e) {
 			return null;
 		}
@@ -86,10 +72,10 @@ public class Client extends Model {
 		try {
 			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "id"))
 				setId(jsonObject.getString("id"));
+			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "name"))
+				setName(jsonObject.getString("name"));
 			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "created"))
 				setCreated(DateUtils.parseFromDateTimeString(jsonObject.getString("created")));
-			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "application"))
-				setApplication(new Application(jsonObject.getJSONObject("application")));
 		} catch (JSONException e) {
 			throw new IllegalArgumentException("Failed to parse JSON.");
 		}
