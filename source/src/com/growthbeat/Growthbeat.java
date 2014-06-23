@@ -30,7 +30,7 @@ public class Growthbeat {
 
 			@Override
 			public void run() {
-				Growthbeat.this.client = Client.create(applicationId, secret);
+				Growthbeat.this.client = Client.create(applicationId, Growthbeat.this.secret);
 				Growthbeat.this.logger.info(String.format("client created (id:%s)", Growthbeat.this.client.getId()));
 			}
 		}).start();

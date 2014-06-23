@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.growthbeat.Preference;
 import com.growthbeat.http.HttpClient;
 import com.growthbeat.utils.DateUtils;
 import com.growthbeat.utils.JSONObjectUtils;
@@ -35,7 +36,10 @@ public class Client extends Model {
 		if (jsonObject == null)
 			return null;
 
-		return new Client(jsonObject);
+		Client client = new Client(jsonObject);
+		Preference.getInstance().saveClient(client);
+
+		return client;
 
 	}
 
