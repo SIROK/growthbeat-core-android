@@ -8,12 +8,9 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.growthbeat.model.Client;
 import com.growthbeat.utils.IOUtils;
 
 public class Preference {
-
-	private static final String CLIENT_KEY = "client";
 
 	private static Preference instance = new Preference();
 
@@ -41,29 +38,7 @@ public class Preference {
 		this.fileName = fileName;
 	}
 
-	public Client fetchClient() {
-
-		JSONObject clientJsonObject = fetch(CLIENT_KEY);
-		if (clientJsonObject == null)
-			return null;
-
-		Client client = new Client();
-		client.setJsonObject(clientJsonObject);
-
-		return client;
-
-	}
-
-	public synchronized void saveClient(Client client) {
-
-		if (client == null)
-			throw new IllegalArgumentException("Argument client cannot be null.");
-
-		save(CLIENT_KEY, client.getJsonObject());
-
-	}
-
-	private JSONObject fetch(String key) {
+	public JSONObject get(String key) {
 
 		try {
 			return getPreferences().getJSONObject(key);
@@ -73,7 +48,7 @@ public class Preference {
 
 	}
 
-	private void save(String key, JSONObject jsonObject) {
+	public void save(String key, JSONObject jsonObject) {
 
 		JSONObject preferences = getPreferences();
 		try {
