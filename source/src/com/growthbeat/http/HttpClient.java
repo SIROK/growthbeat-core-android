@@ -30,7 +30,7 @@ public class HttpClient {
 
 	private final DefaultHttpClient apacheHttpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
-	private String baseUrl;
+	private String baseUrl = null;
 
 	private HttpClient() {
 		HttpConnectionParams.setConnectionTimeout(apacheHttpClient.getParams(), TIMEOUT);

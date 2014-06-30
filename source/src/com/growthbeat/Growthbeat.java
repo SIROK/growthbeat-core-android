@@ -11,7 +11,7 @@ import com.growthpush.observer.ClientObserver;
 
 public class Growthbeat {
 
-	private static final String DEFAULT_BASE_URL = "http://api.localhost:8085/";
+	private static final String HTTP_CLIENT_DEFAULT_BASE_URL = "https://api.growthbeat.com/";
 	private static final String PREFERENCE_DEFAULT_FILE_NAME = "growthbeat-preferences";
 	private static final String PREFERENCE_CLIENT_KEY = "client";
 
@@ -21,13 +21,26 @@ public class Growthbeat {
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private Growthbeat() {
-		HttpClient.getInstance().setBaseUrl(DEFAULT_BASE_URL);
+		if (HttpClient.getInstance().getBaseUrl() == null)
+			HttpClient.getInstance().setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
 		if (Preference.getInstance().getFileName() == null)
 			Preference.getInstance().setFileName(PREFERENCE_DEFAULT_FILE_NAME);
 	}
 
 	public static Growthbeat getInstance() {
 		return instance;
+	}
+
+	public static void setHttpClientBaseUrl(String baseUrl) {
+		HttpClient.getInstance().setBaseUrl(baseUrl);
+	}
+
+	public static void setPreferenceFileName(String fileName) {
+		Preference.getInstance().setFileName(fileName);
+	}
+
+	public static void setLoggerSilent(boolean silent) {
+		Logger.getInstance().setSilent(silent);
 	}
 
 	public void initialize(final String applicationId, final String secret) {
