@@ -13,12 +13,12 @@ import com.growthbeat.utils.IOUtils;
 
 public class Preference {
 
-	private static final String FILE_NAME = "growthbeat-preferences";
 	private static final String CLIENT_KEY = "client";
 
 	private static Preference instance = new Preference();
 
 	private Context context = null;
+	private String fileName = null;
 	private JSONObject preferences = null;
 
 	private Preference() {
@@ -31,6 +31,14 @@ public class Preference {
 
 	public void setContext(Context context) {
 		this.context = context;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public Client fetchClient() {
@@ -76,7 +84,7 @@ public class Preference {
 
 		synchronized (this) {
 			try {
-				FileOutputStream fileOutputStream = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+				FileOutputStream fileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 				fileOutputStream.write(preferences.toString().getBytes());
 				fileOutputStream.flush();
 			} catch (IOException e) {
@@ -92,7 +100,7 @@ public class Preference {
 
 		if (this.preferences == null) {
 			try {
-				String json = IOUtils.toString(context.openFileInput(FILE_NAME));
+				String json = IOUtils.toString(context.openFileInput(fileName));
 				this.preferences = new JSONObject(json);
 			} catch (IOException e) {
 			} catch (JSONException e) {

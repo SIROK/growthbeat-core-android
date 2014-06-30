@@ -9,14 +9,18 @@ import com.growthpush.observer.ClientObserver;
 
 public class Growthbeat {
 
-	private static final Growthbeat instance = new Growthbeat();
 	private static final String DEFAULT_BASE_URL = "http://api.localhost:8085/";
+	private static final String PREFERENCE_DEFAULT_FILE_NAME = "growthbeat-preferences";
+
+	private static final Growthbeat instance = new Growthbeat();
 
 	private Client client;
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private Growthbeat() {
 		HttpClient.getInstance().setBaseUrl(DEFAULT_BASE_URL);
+		if (Preference.getInstance().getFileName() == null)
+			Preference.getInstance().setFileName(PREFERENCE_DEFAULT_FILE_NAME);
 	}
 
 	public static Growthbeat getInstance() {
