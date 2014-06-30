@@ -4,48 +4,52 @@ import android.util.Log;
 
 public class Logger {
 
+	private static final Logger logger = new Logger();
 	private static final String TAG = "Growthbeat";
-	private boolean debug = false;
+	private boolean silent = false;
 
-	public Logger() {
+	private Logger() {
 		super();
 	}
 
-	public Logger(boolean debug) {
-		this();
-		setDebug(debug);
+	public static Logger getInstance() {
+		return logger;
 	}
 
 	public void debug(String message) {
 
-		if (debug)
+		if (!silent)
 			Log.d(TAG, message);
 
 	}
 
 	public void info(String message) {
 
-		if (debug)
+		if (!silent)
 			Log.i(TAG, message);
 
 	}
 
 	public void warning(String message) {
 
-		if (debug)
+		if (!silent)
 			Log.w(TAG, message);
 
 	}
 
 	public void error(String message) {
 
-		if (debug)
+		if (!silent)
 			Log.e(TAG, message);
 
 	}
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+	public boolean getSilent() {
+		return silent;
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
 	}
 
 }
