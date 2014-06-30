@@ -59,7 +59,7 @@ public class Growthbeat {
 					return;
 				}
 
-				// TODO clear preference
+				Preference.getInstance().removeAll();
 
 				Logger.getInstance().info(String.format("Creating client... (applicationId:%s)", applicationId));
 				client = Client.create(applicationId, credentialId);

@@ -56,6 +56,23 @@ public class Preference {
 		} catch (JSONException e) {
 			return;
 		}
+		saveFile(preferences);
+
+	}
+
+	public void remove(String key) {
+
+		JSONObject preferences = getPreferences();
+		preferences.remove(key);
+		saveFile(preferences);
+
+	}
+
+	public void removeAll() {
+		context.deleteFile(fileName);
+	}
+
+	private void saveFile(JSONObject jsonObject) {
 
 		synchronized (this) {
 			try {
