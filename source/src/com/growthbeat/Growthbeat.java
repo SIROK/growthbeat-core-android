@@ -43,7 +43,7 @@ public class Growthbeat {
 		Logger.getInstance().setSilent(silent);
 	}
 
-	public void initialize(final String applicationId, final String secret) {
+	public void initialize(final String applicationId, final String credentialId) {
 
 		new Thread(new Runnable() {
 
@@ -62,7 +62,7 @@ public class Growthbeat {
 				// TODO clear preference
 
 				Logger.getInstance().info(String.format("Creating client... (applicationId:%s)", applicationId));
-				client = Client.create(applicationId, secret);
+				client = Client.create(applicationId, credentialId);
 
 				if (client == null) {
 					Logger.getInstance().info("Failed to create client.");

@@ -25,11 +25,11 @@ public class Client extends Model {
 		super(jsonObject);
 	}
 
-	public static Client create(String applicationId, String secret) {
+	public static Client create(String applicationId, String credentialId) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("applicationId", applicationId);
-		params.put("secret", secret);
+		params.put("credentialId", credentialId);
 
 		JSONObject jsonObject = HttpClient.getInstance().post("1/clients", params);
 		if (jsonObject == null)
