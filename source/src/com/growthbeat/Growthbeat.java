@@ -13,6 +13,7 @@ import com.growthbeat.observer.ClientObserver;
 
 public class Growthbeat {
 
+	private static final String LOGGER_DEFAULT_TAG = "Growthbeat";
 	private static final String HTTP_CLIENT_DEFAULT_BASE_URL = "https://api.growthbeat.com/";
 	private static final String PREFERENCE_DEFAULT_FILE_NAME = "growthbeat-preferences";
 	private static final String PREFERENCE_CLIENT_KEY = "client";
@@ -23,6 +24,8 @@ public class Growthbeat {
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private Growthbeat() {
+		if (Logger.getInstance().getTag() == null)
+			Logger.getInstance().setTag(LOGGER_DEFAULT_TAG);
 		if (HttpClient.getInstance().getBaseUrl() == null)
 			HttpClient.getInstance().setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
 		if (Preference.getInstance().getFileName() == null)
