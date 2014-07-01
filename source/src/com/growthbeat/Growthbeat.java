@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import com.growthbeat.http.HttpClient;
 import com.growthbeat.model.Client;
-import com.growthpush.observer.ClientObserver;
+import com.growthbeat.observer.ClientObserver;
 
 public class Growthbeat {
 

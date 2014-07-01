@@ -1,4 +1,4 @@
-package com.growthpush.observer;
+package com.growthbeat.observer;
 
 import com.growthbeat.model.Client;
 
