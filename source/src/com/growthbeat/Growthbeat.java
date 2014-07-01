@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import com.growthbeat.http.HttpClient;
 import com.growthbeat.model.Client;
 import com.growthbeat.observer.ClientObserver;
@@ -43,7 +45,7 @@ public class Growthbeat {
 		Logger.getInstance().setSilent(silent);
 	}
 
-	public void initialize(final String applicationId, final String credentialId) {
+	public void initialize(final Context context, final String applicationId, final String credentialId) {
 
 		new Thread(new Runnable() {
 
@@ -51,6 +53,8 @@ public class Growthbeat {
 			public void run() {
 
 				Logger.getInstance().info(String.format("Initializing... (applicationId:%s)", applicationId));
+
+				Preference.getInstance().setContext(context.getApplicationContext());
 
 				client = loadClient();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
