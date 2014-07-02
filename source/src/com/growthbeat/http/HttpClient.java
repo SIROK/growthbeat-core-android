@@ -62,6 +62,7 @@ public class HttpClient {
 
 		HttpPost post = new HttpPost(baseUrl + api);
 		post.setHeader("Accept", "application/json");
+		post.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		try {
 			post.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {
@@ -78,6 +79,7 @@ public class HttpClient {
 			parameters.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
 
 		HttpPut put = new HttpPut(baseUrl + api);
+		put.setHeader("Accept", "application/json");
 		put.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		try {
 			put.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));

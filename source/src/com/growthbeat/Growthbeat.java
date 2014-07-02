@@ -77,7 +77,7 @@ public class Growthbeat {
 				}
 
 				saveClient(client);
-				Logger.getInstance().info(String.format("lient created. (id:%s)", client.getId()));
+				Logger.getInstance().info(String.format("Client created. (id:%s)", client.getId()));
 				update(client);
 
 			}
