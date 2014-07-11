@@ -31,6 +31,7 @@ public class HttpClient {
 	private final DefaultHttpClient apacheHttpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
 	private String baseUrl = null;
+	private Encrypt encrypt = null;
 
 	private HttpClient() {
 		HttpConnectionParams.setConnectionTimeout(apacheHttpClient.getParams(), TIMEOUT);
@@ -49,6 +50,10 @@ public class HttpClient {
 		this.baseUrl = baseUrl;
 	}
 
+	public void setEncript(String publicKey) {
+		this.encrypt = new Encrypt(publicKey);
+	}
+
 	public JSONObject get(final String api, Map<String, Object> params) {
 		// TODO implemenet
 		return null;
@@ -56,9 +61,7 @@ public class HttpClient {
 
 	public JSONObject post(final String api, Map<String, Object> params) {
 
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		for (Map.Entry<String, Object> entry : params.entrySet())
-			parameters.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
+		List<NameValuePair> parameters = this.convertFromParameter(params);
 
 		HttpPost post = new HttpPost(baseUrl + api);
 		post.setHeader("Accept", "application/json");
@@ -74,9 +77,7 @@ public class HttpClient {
 
 	public JSONObject put(final String api, Map<String, Object> params) {
 
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		for (Map.Entry<String, Object> entry : params.entrySet())
-			parameters.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
+		List<NameValuePair> parameters = this.convertFromParameter(params);
 
 		HttpPut put = new HttpPut(baseUrl + api);
 		put.setHeader("Accept", "application/json");
@@ -93,6 +94,28 @@ public class HttpClient {
 	public JSONObject delete(final String api, Map<String, Object> params) {
 		// TODO implemenet
 		return null;
+	}
+
+	private List<NameValuePair> convertFromParameter(Map<String, Object> params) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+
+		if (this.encrypt == null) {
+			for (Map.Entry<String, Object> entry : params.entrySet())
+				parameters.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
+		} else {
+
+			String query = "";
+			for (Map.Entry<String, Object> entry : params.entrySet())
+				query = query + "&" + entry.getKey() + "=" + entry.getValue();
+
+			parameters.add(new BasicNameValuePair("publicKey", this.encrypt.getPublicKey()));
+			parameters.add(new BasicNameValuePair("data", query));
+
+		}
+
+		return parameters;
+
 	}
 
 	private JSONObject request(final HttpUriRequest httpRequest) {

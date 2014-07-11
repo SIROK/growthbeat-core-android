@@ -49,11 +49,19 @@ public class Growthbeat {
 	}
 
 	public void initialize(final Context context, final String applicationId, final String credentialId) {
+		this.initialize(context, applicationId, credentialId, null);
+	}
+
+	public void initialize(final Context context, final String applicationId, final String credentialId, final String publicKey) {
 
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
+
+				if (publicKey != null) {
+					HttpClient.getInstance().setEncript(publicKey);
+				}
 
 				Logger.getInstance().info(String.format("Initializing... (applicationId:%s)", applicationId));
 
