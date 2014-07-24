@@ -10,9 +10,9 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
@@ -55,45 +55,34 @@ public class HttpClient {
 	}
 
 	public JSONObject get(final String api, Map<String, Object> params) {
-		// TODO implemenet
-		return null;
+		String query = URLEncodedUtils.format(convertFromParameter(params), "UTF-8");
+		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.isEmpty() ? "" : "?" + query)));
+		httpGet.setHeader("Accept", "application/json");
+		return request(httpGet);
 	}
 
 	public JSONObject post(final String api, Map<String, Object> params) {
-
-		List<NameValuePair> parameters = this.convertFromParameter(params);
-
-		HttpPost post = new HttpPost(baseUrl + api);
-		post.setHeader("Accept", "application/json");
-		post.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		try {
-			post.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		return request(post);
-
+		return request(api, params, "POST");
 	}
 
 	public JSONObject put(final String api, Map<String, Object> params) {
-
-		List<NameValuePair> parameters = this.convertFromParameter(params);
-
-		HttpPut put = new HttpPut(baseUrl + api);
-		put.setHeader("Accept", "application/json");
-		put.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		try {
-			put.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		return request(put);
-
+		return request(api, params, "PUT");
 	}
 
 	public JSONObject delete(final String api, Map<String, Object> params) {
-		// TODO implemenet
-		return null;
+		return request(api, params, "DELETE");
+	}
+
+	private JSONObject request(String api, Map<String, Object> params, String method) {
+		HttpRequest httpRequest = new HttpRequest(String.format("%s%s", baseUrl, api));
+		httpRequest.setMethod(method);
+		httpRequest.setHeader("Accept", "application/json");
+		httpRequest.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		try {
+			httpRequest.setEntity(new UrlEncodedFormEntity(convertFromParameter(params), HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+		}
+		return request(httpRequest);
 	}
 
 	private List<NameValuePair> convertFromParameter(Map<String, Object> params) {
