@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.growthbeat.http.HttpClient;
 import com.growthbeat.utils.DateUtils;
+import com.growthbeat.utils.HttpUtils;
 import com.growthbeat.utils.JSONObjectUtils;
 
 public class Client extends Model {
@@ -25,13 +26,13 @@ public class Client extends Model {
 		super(jsonObject);
 	}
 
-	public static Client create(String applicationId, String credentialId) {
+	public static Client create(String applicationId, String credentialId, String publicKey) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("applicationId", applicationId);
 		params.put("credentialId", credentialId);
 
-		JSONObject jsonObject = HttpClient.getInstance().post("1/clients", params);
+		JSONObject jsonObject = HttpClient.getInstance().post("1/clients", HttpUtils.makeEncryptedParameters(params, publicKey));
 		if (jsonObject == null)
 			return null;
 
