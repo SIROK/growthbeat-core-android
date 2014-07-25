@@ -25,7 +25,7 @@ public class RSAUtils {
 	public static PublicKey getPublicKey(String base64EncodedPublicKey) {
 
 		try {
-			byte[] keyData = Base64.decode(base64EncodedPublicKey, Base64.DEFAULT);
+			byte[] keyData = Base64.decode(base64EncodedPublicKey, Base64.NO_WRAP);
 			KeySpec keySpec = new X509EncodedKeySpec(keyData);
 			KeyFactory keyFactory = KeyFactory.getInstance(CIPHER_ALGORITHM);
 			return keyFactory.generatePublic(keySpec);
@@ -42,7 +42,7 @@ public class RSAUtils {
 		byte[] dataBytes = data.getBytes();
 		PublicKey publicKey = getPublicKey(base64EncodedPublicKey);
 		byte[] encryptedDataBytes = encrypt(dataBytes, publicKey);
-		return Base64.encodeToString(encryptedDataBytes, Base64.DEFAULT);
+		return Base64.encodeToString(encryptedDataBytes, Base64.NO_WRAP);
 
 	}
 
