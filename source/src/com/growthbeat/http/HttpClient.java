@@ -56,7 +56,7 @@ public class HttpClient {
 
 	public JSONObject get(final String api, Map<String, Object> params) {
 		String query = URLEncodedUtils.format(convertFromParameter(params), "UTF-8");
-		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.isEmpty() ? "" : "?" + query)));
+		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.length() == 0 ? "" : "?" + query)));
 		httpGet.setHeader("Accept", "application/json");
 		return request(httpGet);
 	}
