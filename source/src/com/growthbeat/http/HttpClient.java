@@ -3,18 +3,14 @@ package com.growthbeat.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
@@ -22,6 +18,7 @@ import org.json.JSONObject;
 
 import com.growthbeat.GrowthbeatException;
 import com.growthbeat.model.Error;
+import com.growthbeat.utils.HttpUtils;
 import com.growthbeat.utils.IOUtils;
 
 public class HttpClient {
@@ -31,7 +28,6 @@ public class HttpClient {
 	private final DefaultHttpClient apacheHttpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
 	private String baseUrl = null;
-	private Encrypt encrypt = null;
 
 	private HttpClient() {
 		HttpConnectionParams.setConnectionTimeout(apacheHttpClient.getParams(), TIMEOUT);
@@ -50,12 +46,8 @@ public class HttpClient {
 		this.baseUrl = baseUrl;
 	}
 
-	public void setEncript(String publicKey) {
-		this.encrypt = new Encrypt(publicKey);
-	}
-
 	public JSONObject get(final String api, Map<String, Object> params) {
-		String query = URLEncodedUtils.format(convertFromParameter(params), "UTF-8");
+		String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(params), "UTF-8");
 		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.length() == 0 ? "" : "?" + query)));
 		httpGet.setHeader("Accept", "application/json");
 		return request(httpGet);
@@ -79,32 +71,10 @@ public class HttpClient {
 		httpRequest.setHeader("Accept", "application/json");
 		httpRequest.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		try {
-			httpRequest.setEntity(new UrlEncodedFormEntity(convertFromParameter(params), HTTP.UTF_8));
+			httpRequest.setEntity(new UrlEncodedFormEntity(HttpUtils.makeNameValuePairs(params), HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {
 		}
 		return request(httpRequest);
-	}
-
-	private List<NameValuePair> convertFromParameter(Map<String, Object> params) {
-
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-
-		if (this.encrypt == null) {
-			for (Map.Entry<String, Object> entry : params.entrySet())
-				parameters.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
-		} else {
-
-			String query = "";
-			for (Map.Entry<String, Object> entry : params.entrySet())
-				query = query + "&" + entry.getKey() + "=" + entry.getValue();
-
-			parameters.add(new BasicNameValuePair("publicKey", this.encrypt.getPublicKey()));
-			parameters.add(new BasicNameValuePair("data", query));
-
-		}
-
-		return parameters;
-
 	}
 
 	private JSONObject request(final HttpUriRequest httpRequest) {
