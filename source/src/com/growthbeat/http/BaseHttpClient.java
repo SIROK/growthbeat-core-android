@@ -37,44 +37,35 @@ public class BaseHttpClient {
 		this.baseUrl = baseUrl;
 	}
 
-	public HttpResponse get(String api, Map<String, String> headers, Map<String, Object> params) {
-		String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(params), "UTF-8");
-		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.length() == 0 ? "" : "?" + query)));
-		httpGet.setHeader("Accept", "application/json");
-		for (Map.Entry<String, String> entry : headers.entrySet())
-			httpGet.setHeader(entry.getKey(), entry.getValue());
-		return request(httpGet);
-	}
+	public HttpResponse request(HttpRequest httpRequest) {
 
-	public HttpResponse post(String api, Map<String, String> headers, Map<String, Object> params) {
-		return request("POST", api, headers, params);
-	}
-
-	public HttpResponse put(final String api, Map<String, String> headers, Map<String, Object> params) {
-		return request("PUT", api, headers, params);
-	}
-
-	public HttpResponse delete(final String api, Map<String, String> headers, Map<String, Object> params) {
-		return request("DELETE", api, headers, params);
-	}
-
-	protected HttpResponse request(String method, String api, Map<String, String> headers, Map<String, Object> params) {
-		HttpEntityEnclosingRequest httpRequest = new HttpEntityEnclosingRequest(String.format("%s%s", baseUrl, api));
-		httpRequest.setMethod(method);
-		httpRequest.setHeader("Accept", "application/json");
-		httpRequest.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		try {
-			httpRequest.setEntity(new UrlEncodedFormEntity(HttpUtils.makeNameValuePairs(params), HTTP.UTF_8));
-		} catch (UnsupportedEncodingException e) {
+		if (httpRequest.getMethod() != null && httpRequest.getMethod().equalsIgnoreCase("GET")) {
+			String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(httpRequest.getParameters()), "UTF-8");
+			HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, httpRequest.getPath(), (query.length() == 0 ? "" : "?" + query)));
+			for (Map.Entry<String, String> entry : httpRequest.getHeaders().entrySet())
+				httpGet.setHeader(entry.getKey(), entry.getValue());
+			return request(httpGet);
+		} else {
+			HttpEntityEnclosingRequest httpEntityEnclosingRequest = new HttpEntityEnclosingRequest(String.format("%s%s", baseUrl,
+					httpRequest.getPath()));
+			httpEntityEnclosingRequest.setMethod(httpRequest.getMethod());
+			for (Map.Entry<String, String> entry : httpRequest.getHeaders().entrySet())
+				httpEntityEnclosingRequest.setHeader(entry.getKey(), entry.getValue());
+			try {
+				httpEntityEnclosingRequest.setEntity(new UrlEncodedFormEntity(HttpUtils.makeNameValuePairs(httpRequest.getParameters()),
+						HTTP.UTF_8));
+			} catch (UnsupportedEncodingException e) {
+			}
+			return request(httpEntityEnclosingRequest);
 		}
-		return request(httpRequest);
+
 	}
 
-	protected HttpResponse request(HttpUriRequest httpRequest) {
+	protected HttpResponse request(HttpUriRequest httpUriRequest) {
 
 		org.apache.http.HttpResponse httpResponse = null;
 		try {
-			httpResponse = httpClient.execute(httpRequest);
+			httpResponse = httpClient.execute(httpUriRequest);
 		} catch (IOException e) {
 			throw new GrowthbeatException("Feiled to execute HTTP request. " + e.getMessage(), e);
 		}

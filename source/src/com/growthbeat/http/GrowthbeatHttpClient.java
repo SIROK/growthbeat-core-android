@@ -18,7 +18,8 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 	public JSONObject get(String api, Map<String, Object> params) {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Accept", "application/json");
-		HttpResponse httpResponse = super.get(api, headers, params);
+		HttpRequest httpRequest = new HttpRequest().withMethod("GET").withPath(api).withParameters(params).withHeaders(headers);
+		HttpResponse httpResponse = super.request(httpRequest);
 		return fetchJSONObject(httpResponse);
 	}
 
@@ -38,7 +39,8 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Accept", "application/json");
 		headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		HttpResponse httpResponse = super.request(method, api, headers, params);
+		HttpRequest httpRequest = new HttpRequest().withMethod(method).withPath(api).withParameters(params).withHeaders(headers);
+		HttpResponse httpResponse = super.request(httpRequest);
 		return fetchJSONObject(httpResponse);
 	}
 
