@@ -21,6 +21,7 @@ public class Growthbeat {
 
 	private static final Growthbeat instance = new Growthbeat();
 	private static final Logger logger = new Logger();
+	private static final HttpClient httpClient = new HttpClient();
 
 	private Client client;
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
@@ -28,8 +29,8 @@ public class Growthbeat {
 	private Growthbeat() {
 		if (logger.getTag() == null)
 			logger.setTag(LOGGER_DEFAULT_TAG);
-		if (HttpClient.getInstance().getBaseUrl() == null)
-			HttpClient.getInstance().setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
+		if (httpClient.getBaseUrl() == null)
+			httpClient.setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
 		if (Preference.getInstance().getFileName() == null)
 			Preference.getInstance().setFileName(PREFERENCE_DEFAULT_FILE_NAME);
 	}
@@ -39,7 +40,7 @@ public class Growthbeat {
 	}
 
 	public static void setHttpClientBaseUrl(String baseUrl) {
-		HttpClient.getInstance().setBaseUrl(baseUrl);
+		httpClient.setBaseUrl(baseUrl);
 	}
 
 	public static void setPreferenceFileName(String fileName) {
@@ -130,6 +131,10 @@ public class Growthbeat {
 
 	public Logger getLogger() {
 		return logger;
+	}
+
+	public HttpClient getHttpClient() {
+		return httpClient;
 	}
 
 	private static class Thread extends CatchableThread {

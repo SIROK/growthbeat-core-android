@@ -23,19 +23,13 @@ import com.growthbeat.utils.IOUtils;
 
 public class HttpClient {
 
-	private static final HttpClient instance = new HttpClient();
-
 	private final DefaultHttpClient apacheHttpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
 	private String baseUrl = null;
 
-	private HttpClient() {
+	public HttpClient() {
 		HttpConnectionParams.setConnectionTimeout(apacheHttpClient.getParams(), TIMEOUT);
 		HttpConnectionParams.setSoTimeout(apacheHttpClient.getParams(), TIMEOUT);
-	}
-
-	public static final HttpClient getInstance() {
-		return instance;
 	}
 
 	public String getBaseUrl() {
