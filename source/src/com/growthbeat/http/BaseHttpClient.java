@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -13,11 +12,8 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.growthbeat.GrowthbeatException;
-import com.growthbeat.model.Error;
 import com.growthbeat.utils.HttpUtils;
 import com.growthbeat.utils.IOUtils;
 
@@ -41,7 +37,7 @@ public class BaseHttpClient {
 		this.baseUrl = baseUrl;
 	}
 
-	public JSONObject get(String api, Map<String, String> headers, Map<String, Object> params) {
+	public HttpResponse get(String api, Map<String, String> headers, Map<String, Object> params) {
 		String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(params), "UTF-8");
 		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.length() == 0 ? "" : "?" + query)));
 		httpGet.setHeader("Accept", "application/json");
@@ -50,20 +46,20 @@ public class BaseHttpClient {
 		return request(httpGet);
 	}
 
-	public JSONObject post(String api, Map<String, String> headers, Map<String, Object> params) {
+	public HttpResponse post(String api, Map<String, String> headers, Map<String, Object> params) {
 		return request("POST", api, headers, params);
 	}
 
-	public JSONObject put(final String api, Map<String, String> headers, Map<String, Object> params) {
+	public HttpResponse put(final String api, Map<String, String> headers, Map<String, Object> params) {
 		return request("PUT", api, headers, params);
 	}
 
-	public JSONObject delete(final String api, Map<String, String> headers, Map<String, Object> params) {
+	public HttpResponse delete(final String api, Map<String, String> headers, Map<String, Object> params) {
 		return request("DELETE", api, headers, params);
 	}
 
-	protected JSONObject request(String method, String api, Map<String, String> headers, Map<String, Object> params) {
-		HttpRequest httpRequest = new HttpRequest(String.format("%s%s", baseUrl, api));
+	protected HttpResponse request(String method, String api, Map<String, String> headers, Map<String, Object> params) {
+		HttpEntityEnclosingRequest httpRequest = new HttpEntityEnclosingRequest(String.format("%s%s", baseUrl, api));
 		httpRequest.setMethod(method);
 		httpRequest.setHeader("Accept", "application/json");
 		httpRequest.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -74,24 +70,21 @@ public class BaseHttpClient {
 		return request(httpRequest);
 	}
 
-	protected JSONObject request(HttpUriRequest httpRequest) {
+	protected HttpResponse request(HttpUriRequest httpRequest) {
 
-		HttpResponse httpResponse = null;
+		org.apache.http.HttpResponse httpResponse = null;
 		try {
 			httpResponse = httpClient.execute(httpRequest);
 		} catch (IOException e) {
 			throw new GrowthbeatException("Feiled to execute HTTP request. " + e.getMessage(), e);
 		}
 
-		JSONObject jsonObject = null;
+		String body = null;
 		try {
 			InputStream inputStream = httpResponse.getEntity().getContent();
-			String json = IOUtils.toString(inputStream);
-			jsonObject = new JSONObject(json);
+			body = IOUtils.toString(inputStream);
 		} catch (IOException e) {
 			throw new GrowthbeatException("Failed to read HTTP response. " + e.getMessage(), e);
-		} catch (JSONException e) {
-			throw new GrowthbeatException("Failed to parse response JSON. " + e.getMessage(), e);
 		} finally {
 			try {
 				httpResponse.getEntity().consumeContent();
@@ -100,13 +93,7 @@ public class BaseHttpClient {
 			}
 		}
 
-		int statusCode = httpResponse.getStatusLine().getStatusCode();
-		if (statusCode < 200 || statusCode >= 300) {
-			Error error = new Error(jsonObject);
-			throw new GrowthbeatException(error.getMessage());
-		}
-
-		return jsonObject;
+		return new HttpResponse(httpResponse.getStatusLine().getStatusCode(), body);
 
 	}
 

@@ -4,20 +4,20 @@ import java.net.URI;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
-public class HttpRequest extends HttpEntityEnclosingRequestBase {
+public class HttpEntityEnclosingRequest extends HttpEntityEnclosingRequestBase {
 
 	private String method;
 
-	public HttpRequest() {
+	public HttpEntityEnclosingRequest() {
 		super();
 	}
 
-	public HttpRequest(URI uri) {
+	public HttpEntityEnclosingRequest(URI uri) {
 		super();
 		setURI(uri);
 	}
 
-	public HttpRequest(String uri) {
+	public HttpEntityEnclosingRequest(String uri) {
 		super();
 		setURI(URI.create(uri));
 	}

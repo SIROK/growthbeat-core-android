@@ -3,7 +3,11 @@ package com.growthbeat.http;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.growthbeat.GrowthbeatException;
+import com.growthbeat.model.Error;
 
 public class GrowthbeatHttpClient extends BaseHttpClient {
 
@@ -14,7 +18,8 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 	public JSONObject get(String api, Map<String, Object> params) {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Accept", "application/json");
-		return super.get(api, headers, params);
+		HttpResponse httpResponse = super.get(api, headers, params);
+		return fetchJSONObject(httpResponse);
 	}
 
 	public JSONObject post(String api, Map<String, Object> params) {
@@ -33,7 +38,26 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Accept", "application/json");
 		headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		return super.request(method, api, headers, params);
+		HttpResponse httpResponse = super.request(method, api, headers, params);
+		return fetchJSONObject(httpResponse);
+	}
+
+	private JSONObject fetchJSONObject(HttpResponse httpResponse) {
+
+		JSONObject jsonObject = null;
+		try {
+			jsonObject = new JSONObject(httpResponse.getBody());
+		} catch (JSONException e) {
+			throw new GrowthbeatException("Failed to parse response JSON. " + e.getMessage(), e);
+		}
+
+		if (httpResponse.getStatus() < 200 || httpResponse.getStatus() >= 300) {
+			Error error = new Error(jsonObject);
+			throw new GrowthbeatException(error.getMessage());
+		}
+
+		return jsonObject;
+
 	}
 
 }
