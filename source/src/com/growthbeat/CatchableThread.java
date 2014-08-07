@@ -1,18 +1,18 @@
 package com.growthbeat;
 
-public class Thread extends java.lang.Thread {
+public abstract class CatchableThread extends java.lang.Thread {
 
-	public Thread() {
+	public CatchableThread() {
 		super();
 		initializeUncaughtExceptionHandler();
 	}
 
-	public Thread(Runnable runnable) {
+	public CatchableThread(Runnable runnable) {
 		super(runnable);
 		initializeUncaughtExceptionHandler();
 	}
 
-	public Thread(Runnable runnable, String threadName) {
+	public CatchableThread(Runnable runnable, String threadName) {
 		super(runnable, threadName);
 		initializeUncaughtExceptionHandler();
 	}
@@ -22,13 +22,12 @@ public class Thread extends java.lang.Thread {
 		setUncaughtExceptionHandler(new java.lang.Thread.UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(java.lang.Thread thread, Throwable e) {
-				String message = "Uncaught Exception: " + e.getClass().getName();
-				if (e.getMessage() != null)
-					message += "; " + e.getMessage();
-				Growthbeat.getInstance().getLogger().warning(message);
+				this.uncaughtException(thread, e);
 			}
 		});
 
 	}
+
+	public abstract void uncaughtException(java.lang.Thread thread, Throwable e);
 
 }

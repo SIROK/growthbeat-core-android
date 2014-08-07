@@ -132,4 +132,20 @@ public class Growthbeat {
 		return logger;
 	}
 
+	private static class Thread extends CatchableThread {
+
+		public Thread(Runnable runnable) {
+			super(runnable);
+		}
+
+		@Override
+		public void uncaughtException(java.lang.Thread thread, Throwable e) {
+			String message = "Uncaught Exception: " + e.getClass().getName();
+			if (e.getMessage() != null)
+				message += "; " + e.getMessage();
+			logger.warning(message);
+		}
+
+	}
+
 }
