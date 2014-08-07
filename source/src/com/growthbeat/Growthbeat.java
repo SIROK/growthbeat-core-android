@@ -20,13 +20,14 @@ public class Growthbeat {
 	private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArKub5NHfMSEAHNpbKZDgoe69gyLd0BYi2HFjcc13vvegAGA1zNqDGqFdn2QHR2xlDAnfAJpiGQz7p3QwC+Ic1VZ6KaYSeWRWPeYAjjjnhVKxFH7lJ47hKdZAaj3P7138r+bljiRuDoKwupXH+jfReC4/WCNcvpzuCLeUJuXRZ/xrABRj3EE4gQItsHPT3YpP3/1uTB1P7Qu0DI0kMPcmsNqJe4U0eU1tySffiVlg2+ORurojX4ab4atfNdO9YDUoMTe76FrTAKAmFBu5LnOpZaB2r56i0FUbkH9ZYEbatvVOFBJK6oJaH6KbK65Y1qxVydh790ACxY21np/OB2T2qQIDAQAB";
 
 	private static final Growthbeat instance = new Growthbeat();
+	private static final Logger logger = new Logger();
 
 	private Client client;
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private Growthbeat() {
-		if (Logger.getInstance().getTag() == null)
-			Logger.getInstance().setTag(LOGGER_DEFAULT_TAG);
+		if (logger.getTag() == null)
+			logger.setTag(LOGGER_DEFAULT_TAG);
 		if (HttpClient.getInstance().getBaseUrl() == null)
 			HttpClient.getInstance().setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
 		if (Preference.getInstance().getFileName() == null)
@@ -46,7 +47,7 @@ public class Growthbeat {
 	}
 
 	public static void setLoggerSilent(boolean silent) {
-		Logger.getInstance().setSilent(silent);
+		logger.setSilent(silent);
 	}
 
 	public void initialize(final Context context, final String applicationId, final String credentialId) {
@@ -56,29 +57,29 @@ public class Growthbeat {
 			@Override
 			public void run() {
 
-				Logger.getInstance().info(String.format("Initializing... (applicationId:%s)", applicationId));
+				logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
 
 				Preference.getInstance().setContext(context.getApplicationContext());
 
 				client = loadClient();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
-					Logger.getInstance().info(String.format("Client already exists. (id:%s)", client.getId()));
+					logger.info(String.format("Client already exists. (id:%s)", client.getId()));
 					update(client);
 					return;
 				}
 
 				Preference.getInstance().removeAll();
 
-				Logger.getInstance().info(String.format("Creating client... (applicationId:%s)", applicationId));
+				logger.info(String.format("Creating client... (applicationId:%s)", applicationId));
 				client = Client.create(applicationId, credentialId, PUBLIC_KEY);
 
 				if (client == null) {
-					Logger.getInstance().info("Failed to create client.");
+					logger.info("Failed to create client.");
 					return;
 				}
 
 				saveClient(client);
-				Logger.getInstance().info(String.format("Client created. (id:%s)", client.getId()));
+				logger.info(String.format("Client created. (id:%s)", client.getId()));
 				update(client);
 
 			}
@@ -125,6 +126,10 @@ public class Growthbeat {
 
 		Preference.getInstance().save(PREFERENCE_CLIENT_KEY, client.getJsonObject());
 
+	}
+
+	public Logger getLogger() {
+		return logger;
 	}
 
 }

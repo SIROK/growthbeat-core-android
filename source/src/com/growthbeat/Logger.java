@@ -4,17 +4,21 @@ import android.util.Log;
 
 public class Logger {
 
-	private static final Logger logger = new Logger();
-
-	private boolean silent = false;
 	private String tag = null;
+	private boolean silent = false;
 
-	private Logger() {
+	public Logger() {
 		super();
 	}
 
-	public static Logger getInstance() {
-		return logger;
+	public Logger(String tag) {
+		this();
+		setTag(tag);
+	}
+
+	public Logger(String tag, boolean silent) {
+		this(tag);
+		setSilent(silent);
 	}
 
 	public void debug(String message) {

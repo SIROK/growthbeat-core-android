@@ -25,7 +25,7 @@ public class Thread extends java.lang.Thread {
 				String message = "Uncaught Exception: " + e.getClass().getName();
 				if (e.getMessage() != null)
 					message += "; " + e.getMessage();
-				Logger.getInstance().warning(message);
+				Growthbeat.getInstance().getLogger().warning(message);
 			}
 		});
 
