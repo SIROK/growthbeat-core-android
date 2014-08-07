@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.growthbeat.http.HttpClient;
+import com.growthbeat.http.GrowthbeatHttpClient;
 import com.growthbeat.model.Client;
 import com.growthbeat.observer.ClientObserver;
 
@@ -21,16 +21,14 @@ public class Growthbeat {
 
 	private static final Growthbeat instance = new Growthbeat();
 	private static final Logger logger = new Logger();
-	private static final HttpClient httpClient = new HttpClient();
+	private static final GrowthbeatHttpClient httpClient = new GrowthbeatHttpClient();
 
 	private Client client;
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private Growthbeat() {
-		if (logger.getTag() == null)
-			logger.setTag(LOGGER_DEFAULT_TAG);
-		if (httpClient.getBaseUrl() == null)
-			httpClient.setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
+		logger.setTag(LOGGER_DEFAULT_TAG);
+		httpClient.setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
 		if (Preference.getInstance().getFileName() == null)
 			Preference.getInstance().setFileName(PREFERENCE_DEFAULT_FILE_NAME);
 	}
@@ -133,7 +131,7 @@ public class Growthbeat {
 		return logger;
 	}
 
-	public HttpClient getHttpClient() {
+	public GrowthbeatHttpClient getHttpClient() {
 		return httpClient;
 	}
 

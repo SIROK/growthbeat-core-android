@@ -21,15 +21,16 @@ import com.growthbeat.model.Error;
 import com.growthbeat.utils.HttpUtils;
 import com.growthbeat.utils.IOUtils;
 
-public class HttpClient {
+public class BaseHttpClient {
 
-	private final DefaultHttpClient apacheHttpClient = new DefaultHttpClient();
+	private final DefaultHttpClient httpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
 	private String baseUrl = null;
 
-	public HttpClient() {
-		HttpConnectionParams.setConnectionTimeout(apacheHttpClient.getParams(), TIMEOUT);
-		HttpConnectionParams.setSoTimeout(apacheHttpClient.getParams(), TIMEOUT);
+	public BaseHttpClient() {
+		super();
+		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT);
 	}
 
 	public String getBaseUrl() {
@@ -40,26 +41,28 @@ public class HttpClient {
 		this.baseUrl = baseUrl;
 	}
 
-	public JSONObject get(final String api, Map<String, Object> params) {
+	public JSONObject get(String api, Map<String, String> headers, Map<String, Object> params) {
 		String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(params), "UTF-8");
 		HttpGet httpGet = new HttpGet(String.format("%s%s%s", baseUrl, api, (query.length() == 0 ? "" : "?" + query)));
 		httpGet.setHeader("Accept", "application/json");
+		for (Map.Entry<String, String> entry : headers.entrySet())
+			httpGet.setHeader(entry.getKey(), entry.getValue());
 		return request(httpGet);
 	}
 
-	public JSONObject post(final String api, Map<String, Object> params) {
-		return request(api, params, "POST");
+	public JSONObject post(String api, Map<String, String> headers, Map<String, Object> params) {
+		return request("POST", api, headers, params);
 	}
 
-	public JSONObject put(final String api, Map<String, Object> params) {
-		return request(api, params, "PUT");
+	public JSONObject put(final String api, Map<String, String> headers, Map<String, Object> params) {
+		return request("PUT", api, headers, params);
 	}
 
-	public JSONObject delete(final String api, Map<String, Object> params) {
-		return request(api, params, "DELETE");
+	public JSONObject delete(final String api, Map<String, String> headers, Map<String, Object> params) {
+		return request("DELETE", api, headers, params);
 	}
 
-	private JSONObject request(String api, Map<String, Object> params, String method) {
+	protected JSONObject request(String method, String api, Map<String, String> headers, Map<String, Object> params) {
 		HttpRequest httpRequest = new HttpRequest(String.format("%s%s", baseUrl, api));
 		httpRequest.setMethod(method);
 		httpRequest.setHeader("Accept", "application/json");
@@ -71,11 +74,11 @@ public class HttpClient {
 		return request(httpRequest);
 	}
 
-	private JSONObject request(final HttpUriRequest httpRequest) {
+	protected JSONObject request(HttpUriRequest httpRequest) {
 
 		HttpResponse httpResponse = null;
 		try {
-			httpResponse = apacheHttpClient.execute(httpRequest);
+			httpResponse = httpClient.execute(httpRequest);
 		} catch (IOException e) {
 			throw new GrowthbeatException("Feiled to execute HTTP request. " + e.getMessage(), e);
 		}
