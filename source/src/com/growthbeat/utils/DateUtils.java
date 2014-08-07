@@ -4,53 +4,47 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtils {
+public final class DateUtils {
 
 	private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'HH:mm:ssZZ";
 	private static final String FORMAT_DATE = "yyyy-MM-dd";
 
-	public static String formatToDateTimeString(Date date) {
+	public static String format(Date date, String format) {
 
 		if (date == null)
 			return null;
 
-		return new SimpleDateFormat(FORMAT_DATETIME).format(date);
+		return new SimpleDateFormat(format).format(date);
 
+	}
+
+	public static String formatToDateTimeString(Date date) {
+		return format(date, FORMAT_DATETIME);
 	}
 
 	public static String formatToDateString(Date date) {
-
-		if (date == null)
-			return null;
-
-		return new SimpleDateFormat(FORMAT_DATE).format(date);
-
+		return format(date, FORMAT_DATE);
 	}
 
-	public static Date parseFromDateTimeString(String date) {
+	public static Date parse(String string, String format) {
 
-		if (date == null)
+		if (string == null)
 			return null;
 
 		try {
-			return new SimpleDateFormat(FORMAT_DATETIME).parse(date);
+			return new SimpleDateFormat(format).parse(string);
 		} catch (ParseException e) {
 			return null;
 		}
 
 	}
 
-	public static Date parseFromDateString(String date) {
+	public static Date parseFromDateTimeString(String string) {
+		return parse(string, FORMAT_DATETIME);
+	}
 
-		if (date == null)
-			return null;
-
-		try {
-			return new SimpleDateFormat(FORMAT_DATE).parse(date);
-		} catch (ParseException e) {
-			return null;
-		}
-
+	public static Date parseFromDateString(String string) {
+		return parse(string, FORMAT_DATE);
 	}
 
 }
