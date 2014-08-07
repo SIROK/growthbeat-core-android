@@ -3,6 +3,7 @@ package com.growthbeat.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public final class DateUtils {
 
@@ -14,7 +15,7 @@ public final class DateUtils {
 		if (date == null)
 			return null;
 
-		return new SimpleDateFormat(format).format(date);
+		return new SimpleDateFormat(format, Locale.getDefault()).format(date);
 
 	}
 

@@ -15,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import android.util.Base64;
 
-public class RSAUtils {
+public final class RSAUtils {
 
 	private static final String CIPHER_ALGORITHM = "RSA";
 	private static final String BLOCK_MODE = "ECB";

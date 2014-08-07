@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 import android.os.Build;
 
-public class IOUtils {
+public final class IOUtils {
 
 	public static String toString(InputStream inputStream) throws IOException {
 
@@ -25,7 +25,7 @@ public class IOUtils {
 			return stringBuilder.toString();
 
 		} catch (IOException e) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+			if (DeviceUtils.getApiVersion() >= Build.VERSION_CODES.GINGERBREAD)
 				throw new IOException("Failed to convert InputStream to String.", e);
 			else
 				throw new IOException("Failed to convert InputStream to String.");
@@ -35,7 +35,7 @@ public class IOUtils {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+					if (DeviceUtils.getApiVersion() >= Build.VERSION_CODES.GINGERBREAD)
 						throw new IOException("Failed to close InputStream.", e);
 					else
 						throw new IOException("Failed to close InputStream.");

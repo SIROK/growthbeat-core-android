@@ -9,7 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-public class HttpUtils {
+public final class HttpUtils {
 
 	public static final List<NameValuePair> makeNameValuePairs(Map<String, Object> parameters) {
 
