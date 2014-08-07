@@ -1,13 +1,17 @@
 package com.growthbeat.http;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.http.HttpEntity;
 
 public class HttpRequest {
 
-	private String method;
-	private String path;
-	private Map<String, String> headers;
-	private Map<String, Object> parameters;
+	private String method = "GET";
+	private String path = "/";
+	private Map<String, String> headers = new HashMap<String, String>();
+	private Map<String, Object> parameters = new HashMap<String, Object>();
+	private HttpEntity entity = null;
 
 	public HttpRequest() {
 		super();
@@ -62,6 +66,19 @@ public class HttpRequest {
 
 	public HttpRequest withParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
+		return this;
+	}
+
+	public HttpEntity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(HttpEntity entity) {
+		this.entity = entity;
+	}
+
+	public HttpRequest withEntity(HttpEntity entity) {
+		this.entity = entity;
 		return this;
 	}
 
