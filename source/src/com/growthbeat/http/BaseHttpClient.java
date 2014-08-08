@@ -4,11 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import com.growthbeat.GrowthbeatException;
 import com.growthbeat.utils.HttpUtils;
@@ -16,12 +24,17 @@ import com.growthbeat.utils.IOUtils;
 
 public class BaseHttpClient {
 
-	private final DefaultHttpClient httpClient = new DefaultHttpClient();
 	private final int TIMEOUT = 10 * 60 * 1000;
+	private HttpClient httpClient = null;
 	private String baseUrl = null;
 
 	public BaseHttpClient() {
 		super();
+		HttpParams httpParams = new BasicHttpParams();
+		SchemeRegistry schemeRegistry = new SchemeRegistry();
+		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+		schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+		this.httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(httpParams, schemeRegistry), httpParams);
 		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), TIMEOUT);
 		HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT);
 	}
