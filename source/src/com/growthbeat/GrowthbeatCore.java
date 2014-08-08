@@ -1,15 +1,11 @@
 package com.growthbeat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONObject;
 
 import android.content.Context;
 
 import com.growthbeat.http.GrowthbeatHttpClient;
 import com.growthbeat.model.Client;
-import com.growthbeat.observer.ClientObserver;
 
 public class GrowthbeatCore {
 
@@ -24,7 +20,6 @@ public class GrowthbeatCore {
 	private final Preference preference = new Preference();
 
 	private Client client;
-	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
 
 	private GrowthbeatCore() {
 		super();
@@ -63,7 +58,6 @@ public class GrowthbeatCore {
 				client = loadClient();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
 					logger.info(String.format("Client already exists. (id:%s)", client.getId()));
-					update(client);
 					return;
 				}
 
@@ -79,7 +73,6 @@ public class GrowthbeatCore {
 
 				saveClient(client);
 				logger.info(String.format("Client created. (id:%s)", client.getId()));
-				update(client);
 
 			}
 
@@ -91,17 +84,14 @@ public class GrowthbeatCore {
 		return client;
 	}
 
-	public void addClientObserver(ClientObserver clientObserver) {
-		clientObservers.add(clientObserver);
-	}
-
-	public void removeClientObserver(ClientObserver clientObserver) {
-		clientObservers.remove(clientObserver);
-	}
-
-	public void update(Client client) {
-		for (ClientObserver clientObserver : clientObservers) {
-			clientObserver.update(client);
+	public Client waitClient() {
+		while (true) {
+			if (client != null)
+				return client;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 
