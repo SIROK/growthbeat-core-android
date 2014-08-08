@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
-import com.growthbeat.Growthbeat;
+import com.growthbeat.GrowthbeatCore;
 import com.growthbeat.model.Client;
 import com.growthbeat.observer.ClientObserver;
 
@@ -15,13 +15,13 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Growthbeat.getInstance().addClientObserver(new ClientObserver() {
+		GrowthbeatCore.getInstance().addClientObserver(new ClientObserver() {
 			@Override
 			public void update(Client client) {
 				Log.i("Growthbeat", String.format("Current client ID:%s", client.getId()));
 			}
 		});
-		Growthbeat.getInstance().initialize(this.getApplicationContext(), "dy6VlRMnN3juhW9L", "NuvkVhQtRDG2nrNeDzHXzZO5c6j0Xu5t");
+		GrowthbeatCore.getInstance().initialize(this.getApplicationContext(), "dy6VlRMnN3juhW9L", "NuvkVhQtRDG2nrNeDzHXzZO5c6j0Xu5t");
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.growthbeat.Growthbeat;
+import com.growthbeat.GrowthbeatCore;
 import com.growthbeat.utils.DateUtils;
 import com.growthbeat.utils.HttpUtils;
 import com.growthbeat.utils.JSONObjectUtils;
@@ -32,7 +32,7 @@ public class Client extends Model {
 		params.put("applicationId", applicationId);
 		params.put("credentialId", credentialId);
 
-		JSONObject jsonObject = Growthbeat.getInstance().getHttpClient()
+		JSONObject jsonObject = GrowthbeatCore.getInstance().getHttpClient()
 				.post("1/clients", HttpUtils.makeEncryptedParameters(params, publicKey));
 		if (jsonObject == null)
 			return null;
