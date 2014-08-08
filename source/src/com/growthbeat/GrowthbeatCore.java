@@ -55,15 +55,6 @@ public class GrowthbeatCore {
 
 			@Override
 			public void run() {
-				throw new RuntimeException("hoge");
-			}
-
-		}).start();
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
 
 				logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
 
@@ -157,10 +148,10 @@ public class GrowthbeatCore {
 		@Override
 		public void uncaughtException(java.lang.Thread thread, Throwable e) {
 			String message = "Uncaught Exception: " + e.getClass().getName();
-			e.printStackTrace();
 			if (e.getMessage() != null)
 				message += "; " + e.getMessage();
 			getInstance().getLogger().warning(message);
+			e.printStackTrace();
 		}
 
 	}
