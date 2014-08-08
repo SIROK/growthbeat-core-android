@@ -1,4 +1,4 @@
-package com.growthbeat.growthbeatsample;
+package com.growthbeat.growthbeatcoresample;
 
 import android.app.Activity;
 import android.os.Bundle;
