@@ -22,7 +22,7 @@ public abstract class CatchableThread extends java.lang.Thread {
 		setUncaughtExceptionHandler(new java.lang.Thread.UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException(java.lang.Thread thread, Throwable e) {
-				this.uncaughtException(thread, e);
+				CatchableThread.this.uncaughtException(thread, e);
 			}
 		});
 

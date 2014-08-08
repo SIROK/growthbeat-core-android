@@ -21,6 +21,7 @@ public class GrowthbeatCore {
 	private static final GrowthbeatCore instance = new GrowthbeatCore();
 	private final Logger logger = new Logger();
 	private final GrowthbeatHttpClient httpClient = new GrowthbeatHttpClient();
+	private final Preference preference = new Preference();
 
 	private Client client;
 	private List<ClientObserver> clientObservers = new ArrayList<ClientObserver>();
@@ -29,8 +30,7 @@ public class GrowthbeatCore {
 		super();
 		logger.setTag(LOGGER_DEFAULT_TAG);
 		httpClient.setBaseUrl(HTTP_CLIENT_DEFAULT_BASE_URL);
-		if (Preference.getInstance().getFileName() == null)
-			Preference.getInstance().setFileName(PREFERENCE_DEFAULT_FILE_NAME);
+		preference.setFileName(PREFERENCE_DEFAULT_FILE_NAME);
 	}
 
 	public static GrowthbeatCore getInstance() {
@@ -38,11 +38,11 @@ public class GrowthbeatCore {
 	}
 
 	public static void setHttpClientBaseUrl(String baseUrl) {
-		getInstance().getHttpClient().setBaseUrl(baseUrl);
+		instance.getHttpClient().setBaseUrl(baseUrl);
 	}
 
 	public static void setPreferenceFileName(String fileName) {
-		Preference.getInstance().setFileName(fileName);
+		instance.getPreference().setFileName(fileName);
 	}
 
 	public static void setLoggerSilent(boolean silent) {
@@ -55,10 +55,19 @@ public class GrowthbeatCore {
 
 			@Override
 			public void run() {
+				throw new RuntimeException("hoge");
+			}
+
+		}).start();
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
 
 				logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
 
-				Preference.getInstance().setContext(context.getApplicationContext());
+				preference.setContext(context.getApplicationContext());
 
 				client = loadClient();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
@@ -67,7 +76,7 @@ public class GrowthbeatCore {
 					return;
 				}
 
-				Preference.getInstance().removeAll();
+				preference.removeAll();
 
 				logger.info(String.format("Creating client... (applicationId:%s)", applicationId));
 				client = Client.create(applicationId, credentialId);
@@ -107,7 +116,7 @@ public class GrowthbeatCore {
 
 	public Client loadClient() {
 
-		JSONObject clientJsonObject = Preference.getInstance().get(PREFERENCE_CLIENT_KEY);
+		JSONObject clientJsonObject = preference.get(PREFERENCE_CLIENT_KEY);
 		if (clientJsonObject == null)
 			return null;
 
@@ -123,7 +132,7 @@ public class GrowthbeatCore {
 		if (client == null)
 			throw new IllegalArgumentException("Argument client cannot be null.");
 
-		Preference.getInstance().save(PREFERENCE_CLIENT_KEY, client.getJsonObject());
+		preference.save(PREFERENCE_CLIENT_KEY, client.getJsonObject());
 
 	}
 
@@ -135,6 +144,10 @@ public class GrowthbeatCore {
 		return httpClient;
 	}
 
+	public Preference getPreference() {
+		return preference;
+	}
+
 	private static class Thread extends CatchableThread {
 
 		public Thread(Runnable runnable) {
@@ -144,6 +157,7 @@ public class GrowthbeatCore {
 		@Override
 		public void uncaughtException(java.lang.Thread thread, Throwable e) {
 			String message = "Uncaught Exception: " + e.getClass().getName();
+			e.printStackTrace();
 			if (e.getMessage() != null)
 				message += "; " + e.getMessage();
 			getInstance().getLogger().warning(message);

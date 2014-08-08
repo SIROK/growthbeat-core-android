@@ -12,18 +12,12 @@ import com.growthbeat.utils.IOUtils;
 
 public class Preference {
 
-	private static Preference instance = new Preference();
-
 	private Context context = null;
 	private String fileName = null;
 	private JSONObject preferences = null;
 
-	private Preference() {
+	public Preference() {
 		super();
-	}
-
-	public static Preference getInstance() {
-		return instance;
 	}
 
 	public void setContext(Context context) {
