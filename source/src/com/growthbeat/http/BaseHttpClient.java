@@ -50,10 +50,11 @@ public class BaseHttpClient {
 	public HttpResponse request(HttpRequest httpRequest) {
 
 		String query = URLEncodedUtils.format(HttpUtils.makeNameValuePairs(httpRequest.getParameters()), "UTF-8");
-		String url = String.format("%s%s%s", baseUrl, httpRequest.getPath(), (query.length() == 0 ? "" : "?" + query));
+		String url = String.format("%s%s", baseUrl, httpRequest.getPath());
 
 		HttpUriRequest httpUriRequest = null;
 		if (httpRequest.getMethod() != null && httpRequest.getMethod().equalsIgnoreCase("GET")) {
+			url = url + (query.length() == 0 ? "" : "?" + query);
 			httpUriRequest = new HttpGet(url);
 		} else {
 			HttpEntityEnclosingRequest httpEntityEnclosingRequest = new HttpEntityEnclosingRequest(url);
