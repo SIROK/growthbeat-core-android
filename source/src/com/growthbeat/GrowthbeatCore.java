@@ -16,6 +16,7 @@ public class GrowthbeatCore {
 	private final GrowthbeatHttpClient httpClient = new GrowthbeatHttpClient(HTTP_CLIENT_DEFAULT_BASE_URL);
 	private final Preference preference = new Preference(PREFERENCE_DEFAULT_FILE_NAME);
 
+	private Context context = null;
 	private Client client;
 
 	private GrowthbeatCore() {
@@ -26,7 +27,9 @@ public class GrowthbeatCore {
 		return instance;
 	}
 
-	public void initialize(final Context context, final String applicationId, final String credentialId) {
+	public void initialize(Context context, final String applicationId, final String credentialId) {
+
+		this.context = context.getApplicationContext();
 
 		new Thread(new Runnable() {
 
@@ -35,7 +38,7 @@ public class GrowthbeatCore {
 
 				logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
 
-				preference.setContext(context.getApplicationContext());
+				preference.setContext(GrowthbeatCore.this.context);
 
 				client = Client.load();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
@@ -87,6 +90,10 @@ public class GrowthbeatCore {
 
 	public Preference getPreference() {
 		return preference;
+	}
+
+	public Context getContext() {
+		return context;
 	}
 
 	private static class Thread extends CatchableThread {
