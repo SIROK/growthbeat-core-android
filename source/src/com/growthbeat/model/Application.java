@@ -46,6 +46,7 @@ public class Application extends Model {
 		this.created = created;
 	}
 
+	@Override
 	public JSONObject getJsonObject() {
 
 		JSONObject jsonObject = new JSONObject();
@@ -61,6 +62,7 @@ public class Application extends Model {
 
 	}
 
+	@Override
 	public void setJsonObject(JSONObject jsonObject) {
 
 		if (jsonObject == null)

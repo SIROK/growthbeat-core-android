@@ -63,6 +63,7 @@ public class Client extends Model {
 		this.application = application;
 	}
 
+	@Override
 	public JSONObject getJsonObject() {
 
 		JSONObject jsonObject = new JSONObject();
@@ -78,6 +79,7 @@ public class Client extends Model {
 
 	}
 
+	@Override
 	public void setJsonObject(JSONObject jsonObject) {
 
 		if (jsonObject == null)

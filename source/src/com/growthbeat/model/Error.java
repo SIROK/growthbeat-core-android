@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import com.growthbeat.utils.JSONObjectUtils;
 
-public class Error {
+public class Error extends Model {
 
 	private int code;
 	private String message;
@@ -41,6 +41,12 @@ public class Error {
 		this.message = message;
 	}
 
+	@Override
+	public JSONObject getJsonObject() {
+		return null;
+	}
+
+	@Override
 	public void setJsonObject(JSONObject jsonObject) {
 
 		try {
