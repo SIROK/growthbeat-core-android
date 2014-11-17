@@ -1,12 +1,10 @@
 package com.growthbeat.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 public final class HttpUtils {
@@ -22,16 +20,4 @@ public final class HttpUtils {
 
 	}
 
-	public static final Map<String, Object> makeEncryptedParameters(Map<String, Object> parameters, String base64EncodedPublicKey) {
-
-		Map<String, Object> encryptedParameters = new HashMap<String, Object>();
-		encryptedParameters.put("publicKey", base64EncodedPublicKey);
-
-		String query = URLEncodedUtils.format(makeNameValuePairs(parameters), "UTF-8");
-		String data = RSAUtils.encrypt(query, base64EncodedPublicKey);
-		encryptedParameters.put("data", data);
-
-		return encryptedParameters;
-
-	}
 }
