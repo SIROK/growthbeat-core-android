@@ -20,6 +20,16 @@ public class Preference {
 		super();
 	}
 
+	public Preference(String fileName) {
+		this();
+		setFileName(fileName);
+	}
+
+	public Preference(Context context, String fileName) {
+		this(fileName);
+		setContext(context);
+	}
+
 	public void setContext(Context context) {
 		this.context = context;
 	}

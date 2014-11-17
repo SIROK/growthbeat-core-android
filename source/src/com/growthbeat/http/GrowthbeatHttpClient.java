@@ -20,6 +20,11 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 		super();
 	}
 
+	public GrowthbeatHttpClient(String baseUrl) {
+		this();
+		setBaseUrl(baseUrl);
+	}
+
 	public JSONObject get(String api, Map<String, Object> params) {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Accept", "application/json");

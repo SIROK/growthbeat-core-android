@@ -39,6 +39,11 @@ public class BaseHttpClient {
 		HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT);
 	}
 
+	public BaseHttpClient(String baseUrl) {
+		this();
+		setBaseUrl(baseUrl);
+	}
+
 	public String getBaseUrl() {
 		return baseUrl;
 	}
