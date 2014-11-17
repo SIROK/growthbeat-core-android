@@ -1,7 +1,5 @@
 package com.growthbeat;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 
 import com.growthbeat.http.GrowthbeatHttpClient;
@@ -12,7 +10,6 @@ public class GrowthbeatCore {
 	private static final String LOGGER_DEFAULT_TAG = "Growthbeat";
 	private static final String HTTP_CLIENT_DEFAULT_BASE_URL = "https://api.growthbeat.com/";
 	private static final String PREFERENCE_DEFAULT_FILE_NAME = "growthbeat-preferences";
-	private static final String PREFERENCE_CLIENT_KEY = "client";
 
 	private static final GrowthbeatCore instance = new GrowthbeatCore();
 	private final Logger logger = new Logger(LOGGER_DEFAULT_TAG);
@@ -40,7 +37,7 @@ public class GrowthbeatCore {
 
 				preference.setContext(context.getApplicationContext());
 
-				client = loadClient();
+				client = Client.load();
 				if (client != null && client.getApplication().getId().equals(applicationId)) {
 					logger.info(String.format("Client already exists. (id:%s)", client.getId()));
 					return;
@@ -56,7 +53,7 @@ public class GrowthbeatCore {
 					return;
 				}
 
-				saveClient(client);
+				Client.save(client);
 				logger.info(String.format("Client created. (id:%s)", client.getId()));
 
 			}
@@ -78,28 +75,6 @@ public class GrowthbeatCore {
 			} catch (InterruptedException e) {
 			}
 		}
-	}
-
-	public Client loadClient() {
-
-		JSONObject clientJsonObject = preference.get(PREFERENCE_CLIENT_KEY);
-		if (clientJsonObject == null)
-			return null;
-
-		Client client = new Client();
-		client.setJsonObject(clientJsonObject);
-
-		return client;
-
-	}
-
-	public synchronized void saveClient(Client client) {
-
-		if (client == null)
-			throw new IllegalArgumentException("Argument client cannot be null.");
-
-		preference.save(PREFERENCE_CLIENT_KEY, client.getJsonObject());
-
 	}
 
 	public Logger getLogger() {

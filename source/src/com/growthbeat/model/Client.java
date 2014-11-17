@@ -25,6 +25,28 @@ public class Client extends Model {
 		super(jsonObject);
 	}
 
+	public static Client load() {
+
+		JSONObject clientJsonObject = GrowthbeatCore.getInstance().getPreference().get(Client.class.getName());
+		if (clientJsonObject == null)
+			return null;
+
+		Client client = new Client();
+		client.setJsonObject(clientJsonObject);
+
+		return client;
+
+	}
+
+	public static synchronized void save(Client client) {
+
+		if (client == null)
+			throw new IllegalArgumentException("Argument client cannot be null.");
+
+		GrowthbeatCore.getInstance().getPreference().save(Client.class.getName(), client.getJsonObject());
+
+	}
+
 	public static Client create(String applicationId, String credentialId) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
