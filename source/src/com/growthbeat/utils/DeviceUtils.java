@@ -1,5 +1,7 @@
 package com.growthbeat.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -40,6 +42,10 @@ public final class DeviceUtils {
 
 	public static String getTimeZone() {
 		return TimeZone.getDefault().getID();
+	}
+
+	public static String getTimeZoneOffset() {
+		return new SimpleDateFormat("Z").format(Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).getTime());
 	}
 
 	public static boolean connectedToWiFi(Context context) {
