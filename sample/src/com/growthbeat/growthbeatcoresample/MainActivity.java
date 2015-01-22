@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 				Log.i("Growthbeat Core", "client.id:" + client.getId());
 			}
 		}).start();
-		GrowthbeatCore.getInstance().initialize(this.getApplicationContext(), "dy6VlRMnN3juhW9L", "NuvkVhQtRDG2nrNeDzHXzZO5c6j0Xu5t");
+		GrowthbeatCore.getInstance().initialize(this.getApplicationContext(), "OyVa3zboPjHVjsDC", "3EKydeJ0imxJ5WqS22FJfdVamFLgu7XA");
 	}
 
 	@Override
