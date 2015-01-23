@@ -29,6 +29,9 @@ public class GrowthbeatCore {
 
 	public void initialize(Context context, final String applicationId, final String credentialId) {
 
+		if (this.context != null)
+			return;
+
 		this.context = context.getApplicationContext();
 
 		new Thread(new Runnable() {
