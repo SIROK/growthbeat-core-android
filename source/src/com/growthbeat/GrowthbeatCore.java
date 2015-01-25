@@ -29,6 +29,16 @@ public class GrowthbeatCore {
 
 	public void initialize(Context context, final String applicationId, final String credentialId) {
 
+		if (this.context != null) {
+			logger.warning("GrowthbeatCore is already initialized.");
+			return;
+		}
+
+		if (context == null) {
+			logger.warning("The context parameter cannot be null.");
+			return;
+		}
+
 		this.context = context.getApplicationContext();
 
 		new Thread(new Runnable() {

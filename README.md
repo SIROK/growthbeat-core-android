@@ -21,14 +21,21 @@ Growthbeat is growth hack platform for mobile apps. This repository includes onl
 
 ## Integrations
 
-### Growth Push
+### Growth Analytics
+
+[Growth Analytics](https://analytics.growthbeat.com/) is analytics service for mobile apps.
+
+* [Growth Analytics SDK for iOS](https://github.com/SIROK/growthanalytics-ios)
+* [Growth Analytics SDK for Android](https://github.com/SIROK/growthanalytics-android)
+
+### Growth Push (Under development)
 
 [Growth Push](https://growthpush.com/) is push notification and analysis platform for mobile apps.
 
 * [Growth Push SDK for iOS](https://github.com/SIROK/growthpush-ios)
 * [Growth Push SDK for Android](https://github.com/SIROK/growthpush-android)
 
-### Growth Replay
+### Growth Replay (Under development)
 
 [Growth Replay](https://growthreplay.com/) is usability testing tool for mobile apps.
 

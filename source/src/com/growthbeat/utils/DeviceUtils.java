@@ -1,7 +1,5 @@
 package com.growthbeat.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -33,24 +31,32 @@ public final class DeviceUtils {
 	}
 
 	public static String getCountry() {
+		if (Locale.getDefault() == null)
+			return null;
 		return Locale.getDefault().getCountry();
 	}
 
 	public static String getLanguage() {
+		if (Locale.getDefault() == null)
+			return null;
 		return Locale.getDefault().getLanguage();
 	}
 
 	public static String getTimeZone() {
+		if (Locale.getDefault() == null)
+			return null;
 		return TimeZone.getDefault().getID();
 	}
 
-	public static String getTimeZoneOffset() {
-		return new SimpleDateFormat("Z").format(Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).getTime());
+	public static Integer getTimeZoneOffset() {
+		if (TimeZone.getDefault() == null)
+			return null;
+		return TimeZone.getDefault().getRawOffset() / (60 * 60 * 1000);
 	}
 
 	public static boolean connectedToWiFi(Context context) {
-		ConnectivityManager connectivityManager = SystemServiceUtils.getConnectivityManager(context);
 		try {
+			ConnectivityManager connectivityManager = SystemServiceUtils.getConnectivityManager(context);
 			State wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
 			if (wifi == State.CONNECTED || wifi == State.CONNECTING)
 				return true;
