@@ -50,7 +50,7 @@ public class GrowthbeatCore {
 
 		this.context = context.getApplicationContext();
 
-		this.intentHandlers = Arrays.asList(new UrlIntentHandler(context), new NoopIntentHandler());
+		this.intentHandlers = Arrays.asList(new UrlIntentHandler(this.context), new NoopIntentHandler());
 
 		new Thread(new Runnable() {
 
