@@ -1,9 +1,16 @@
 package com.growthbeat;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Context;
 
 import com.growthbeat.http.GrowthbeatHttpClient;
+import com.growthbeat.intenthandler.IntentHandler;
+import com.growthbeat.intenthandler.NoopIntentHandler;
+import com.growthbeat.intenthandler.UrlIntentHandler;
 import com.growthbeat.model.Client;
+import com.growthbeat.model.Intent;
 
 public class GrowthbeatCore {
 
@@ -18,6 +25,8 @@ public class GrowthbeatCore {
 
 	private Context context = null;
 	private Client client;
+
+	private List<? extends IntentHandler> intentHandlers;
 
 	private GrowthbeatCore() {
 		super();
@@ -40,6 +49,8 @@ public class GrowthbeatCore {
 		}
 
 		this.context = context.getApplicationContext();
+
+		this.intentHandlers = Arrays.asList(new UrlIntentHandler(this.context), new NoopIntentHandler());
 
 		new Thread(new Runnable() {
 
@@ -75,6 +86,17 @@ public class GrowthbeatCore {
 
 	}
 
+	public void handleIntent(Intent intent) {
+
+		if (intentHandlers == null)
+			return;
+
+		for (IntentHandler intentHandler : intentHandlers)
+			if (intentHandler.handle(intent))
+				break;
+
+	}
+
 	public Client getClient() {
 		return client;
 	}
@@ -104,6 +126,10 @@ public class GrowthbeatCore {
 
 	public Context getContext() {
 		return context;
+	}
+
+	public void setIntentHandlers(List<? extends IntentHandler> intentHandlers) {
+		this.intentHandlers = intentHandlers;
 	}
 
 	private static class Thread extends CatchableThread {
