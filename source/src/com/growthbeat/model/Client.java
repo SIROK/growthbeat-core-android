@@ -27,14 +27,11 @@ public class Client extends Model {
 
 	public static Client load() {
 
-		JSONObject clientJsonObject = GrowthbeatCore.getInstance().getPreference().get(Client.class.getName());
-		if (clientJsonObject == null)
+		JSONObject jsonObject = GrowthbeatCore.getInstance().getPreference().get(Client.class.getName());
+		if (jsonObject == null)
 			return null;
 
-		Client client = new Client();
-		client.setJsonObject(clientJsonObject);
-
-		return client;
+		return new Client(jsonObject);
 
 	}
 
@@ -90,8 +87,8 @@ public class Client extends Model {
 
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("id", getId());
-			jsonObject.put("created", DateUtils.formatToDateTimeString(getCreated()));
+			jsonObject.put("id", id);
+			jsonObject.put("created", DateUtils.formatToDateTimeString(created));
 			jsonObject.put("application", application.getJsonObject());
 		} catch (JSONException e) {
 			return null;

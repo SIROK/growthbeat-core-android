@@ -51,9 +51,9 @@ public class Application extends Model {
 
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("id", getId());
-			jsonObject.put("name", getName());
-			jsonObject.put("created", DateUtils.formatToDateTimeString(getCreated()));
+			jsonObject.put("id", id);
+			jsonObject.put("name", name);
+			jsonObject.put("created", DateUtils.formatToDateTimeString(created));
 		} catch (JSONException e) {
 			return null;
 		}

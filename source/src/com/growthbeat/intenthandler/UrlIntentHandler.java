@@ -20,9 +20,15 @@ public class UrlIntentHandler implements IntentHandler {
 		if (intent.getType() != Intent.Type.url)
 			return false;
 
+		if (!(intent instanceof UrlIntent))
+			return false;
+
 		UrlIntent urlIntent = (UrlIntent) intent;
 
+		if (urlIntent.getUrl() == null)
+			return false;
 		Uri uri = Uri.parse(urlIntent.getUrl());
+
 		android.content.Intent androidIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, uri);
 		androidIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(androidIntent);
