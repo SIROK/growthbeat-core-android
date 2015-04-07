@@ -24,6 +24,8 @@ public class GrowthbeatCore {
 	private final Preference preference = new Preference(PREFERENCE_DEFAULT_FILE_NAME);
 
 	private Context context = null;
+
+	private boolean initialized = false;
 	private Client client;
 
 	private List<? extends IntentHandler> intentHandlers;
@@ -38,10 +40,9 @@ public class GrowthbeatCore {
 
 	public void initialize(Context context, final String applicationId, final String credentialId) {
 
-		if (this.context != null) {
-			logger.warning("GrowthbeatCore is already initialized.");
+		if (initialized)
 			return;
-		}
+		initialized = true;
 
 		if (context == null) {
 			logger.warning("The context parameter cannot be null.");
