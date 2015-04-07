@@ -7,17 +7,12 @@ import com.growthbeat.utils.JSONObjectUtils;
 
 public class Error extends Model {
 
-	private int code;
+	private Integer status;
+	private Integer code;
 	private String message;
 
 	public Error() {
 		super();
-	}
-
-	public Error(int code, String message) {
-		this();
-		setCode(code);
-		setMessage(message);
 	}
 
 	public Error(JSONObject jsonObject) {
@@ -25,11 +20,19 @@ public class Error extends Model {
 		setJsonObject(jsonObject);
 	}
 
-	public int getCode() {
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(int code) {
+	public void setCode(Integer code) {
 		this.code = code;
 	}
 
@@ -43,13 +46,27 @@ public class Error extends Model {
 
 	@Override
 	public JSONObject getJsonObject() {
-		return null;
+
+		JSONObject jsonObject = new JSONObject();
+
+		try {
+			jsonObject.put("status", status);
+			jsonObject.put("code", code);
+			jsonObject.put("message", message);
+		} catch (JSONException e) {
+			return null;
+		}
+
+		return jsonObject;
+
 	}
 
 	@Override
 	public void setJsonObject(JSONObject jsonObject) {
 
 		try {
+			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "status"))
+				setStatus(jsonObject.getInt("status"));
 			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "code"))
 				setCode(jsonObject.getInt("code"));
 			if (JSONObjectUtils.hasAndIsNotNull(jsonObject, "message"))

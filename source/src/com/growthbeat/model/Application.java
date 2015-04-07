@@ -50,6 +50,7 @@ public class Application extends Model {
 	public JSONObject getJsonObject() {
 
 		JSONObject jsonObject = new JSONObject();
+
 		try {
 			jsonObject.put("id", id);
 			jsonObject.put("name", name);
