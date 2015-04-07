@@ -50,9 +50,12 @@ public class Error extends Model {
 		JSONObject jsonObject = new JSONObject();
 
 		try {
-			jsonObject.put("status", status);
-			jsonObject.put("code", code);
-			jsonObject.put("message", message);
+			if (status != null)
+				jsonObject.put("status", status);
+			if (code != null)
+				jsonObject.put("code", code);
+			if (message != null)
+				jsonObject.put("message", message);
 		} catch (JSONException e) {
 			return null;
 		}

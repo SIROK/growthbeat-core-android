@@ -52,9 +52,12 @@ public class Application extends Model {
 		JSONObject jsonObject = new JSONObject();
 
 		try {
-			jsonObject.put("id", id);
-			jsonObject.put("name", name);
-			jsonObject.put("created", DateUtils.formatToDateTimeString(created));
+			if (id != null)
+				jsonObject.put("id", id);
+			if (name != null)
+				jsonObject.put("name", name);
+			if (created != null)
+				jsonObject.put("created", DateUtils.formatToDateTimeString(created));
 		} catch (JSONException e) {
 			return null;
 		}

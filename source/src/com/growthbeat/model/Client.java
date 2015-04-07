@@ -87,9 +87,12 @@ public class Client extends Model {
 
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("id", id);
-			jsonObject.put("created", DateUtils.formatToDateTimeString(created));
-			jsonObject.put("application", application.getJsonObject());
+			if (id != null)
+				jsonObject.put("id", id);
+			if (created != null)
+				jsonObject.put("created", DateUtils.formatToDateTimeString(created));
+			if (application != null)
+				jsonObject.put("application", application.getJsonObject());
 		} catch (JSONException e) {
 			return null;
 		}
