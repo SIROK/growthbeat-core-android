@@ -1,15 +1,13 @@
-package com.growthbeat;
+package com.growthbeat.handler;
 
 import com.growthbeat.model.Intent;
+import com.growthbeat.model.type.IntentType;
 
 public class NoopIntentHandler implements IntentHandler {
 
 	@Override
 	public boolean handleIntent(Intent intent) {
-		if (intent.getType().equals("noop"))
-			return true;
-		else 
-			return false;
+		return intent.getType() == IntentType.noop;
 	}
 
 }
