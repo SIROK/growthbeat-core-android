@@ -21,8 +21,11 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 	}
 
 	public GrowthbeatHttpClient(String baseUrl) {
-		this();
-		setBaseUrl(baseUrl);
+		super(baseUrl);
+	}
+
+	public GrowthbeatHttpClient(String baseUrl, int connectionTimeout, int socketTimeout) {
+		super(baseUrl, connectionTimeout, socketTimeout);
 	}
 
 	public JSONObject get(String api, Map<String, Object> params) {
