@@ -24,7 +24,6 @@ import com.growthbeat.utils.IOUtils;
 
 public class BaseHttpClient {
 
-	private final int TIMEOUT = 10 * 60 * 1000;
 	private HttpClient httpClient = null;
 	private String baseUrl = null;
 
@@ -35,13 +34,17 @@ public class BaseHttpClient {
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 		schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 		this.httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(httpParams, schemeRegistry), httpParams);
-		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), TIMEOUT);
-		HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT);
 	}
 
 	public BaseHttpClient(String baseUrl) {
 		this();
 		setBaseUrl(baseUrl);
+	}
+
+	public BaseHttpClient(String baseUrl, int connectionTimeout, int socketTimeout) {
+		this(baseUrl);
+		setConnectionTimeout(connectionTimeout);
+		setSocketTimeout(socketTimeout);
 	}
 
 	public String getBaseUrl() {
@@ -50,6 +53,22 @@ public class BaseHttpClient {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
+	}
+
+	public int getConnectionTimeout() {
+		return HttpConnectionParams.getConnectionTimeout(httpClient.getParams());
+	}
+
+	public void setConnectionTimeout(int timeout) {
+		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), timeout);
+	}
+
+	public int getSocketTimeout() {
+		return HttpConnectionParams.getSoTimeout(httpClient.getParams());
+	}
+
+	public void setSocketTimeout(int timeout) {
+		HttpConnectionParams.setSoTimeout(httpClient.getParams(), timeout);
 	}
 
 	public HttpResponse request(HttpRequest httpRequest) {
