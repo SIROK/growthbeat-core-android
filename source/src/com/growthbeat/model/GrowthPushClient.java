@@ -1,5 +1,6 @@
 package com.growthbeat.model;
 
+import com.growthbeat.GrowthbeatCore;
 import com.growthbeat.Preference;
 import com.growthbeat.utils.DateUtils;
 import com.growthbeat.utils.JSONObjectUtils;
@@ -25,6 +26,7 @@ public class GrowthPushClient extends Model {
 
 	public GrowthPushClient() {
 		super();
+		preference.setContext(GrowthbeatCore.getInstance().getContext());
 	}
 
 	public GrowthPushClient(JSONObject jsonObject) {
@@ -39,6 +41,10 @@ public class GrowthPushClient extends Model {
 
 		return new GrowthPushClient(jsonObject);
 
+	}
+
+	public static void removePreference() {
+		preference.removeAll();
 	}
 
 	@Override
