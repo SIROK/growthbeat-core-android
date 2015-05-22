@@ -68,7 +68,9 @@ public class GrowthbeatCore {
 
 				GrowthPushClient growthPushClient = GrowthPushClient.load();
 				if (growthPushClient != null) {
-					logger.info("Growth Push Client found. Convert GrowthPush Client into Growthbeat Client.");
+					logger.info(String.format(
+							"Growth Push Client found. Convert GrowthPush Client into Growthbeat Client. (GrowthPushClientId:%d, GrowthbeatClientId:%s)",
+							growthPushClient.getId(), growthPushClient.getGrowthbeatClientId()));
 					client = Client.findById(growthPushClient.getGrowthbeatClientId(), credentialId);
 					if (client == null) {
 						logger.info("Failed to convert client.");
