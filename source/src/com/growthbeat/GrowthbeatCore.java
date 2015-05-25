@@ -56,22 +56,23 @@ public class GrowthbeatCore {
 
 		this.intentHandlers = Arrays.asList(new UrlIntentHandler(this.context), new NoopIntentHandler());
 
+		logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
+
+		preference.setContext(GrowthbeatCore.this.context);
+
+		client = Client.load();
+		if (client != null && client.getApplication().getId().equals(applicationId)) {
+			logger.info(String.format("Client already exists. (id:%s)", client.getId()));
+			return;
+		}
+
+		preference.removeAll();
+		client = null;
+
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-
-				logger.info(String.format("Initializing... (applicationId:%s)", applicationId));
-
-				preference.setContext(GrowthbeatCore.this.context);
-
-				client = Client.load();
-				if (client != null && client.getApplication().getId().equals(applicationId)) {
-					logger.info(String.format("Client already exists. (id:%s)", client.getId()));
-					return;
-				}
-
-				preference.removeAll();
 
 				logger.info(String.format("Creating client... (applicationId:%s)", applicationId));
 				client = Client.create(applicationId, credentialId);

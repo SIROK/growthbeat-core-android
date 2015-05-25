@@ -36,13 +36,9 @@ public class BaseHttpClient {
 		this.httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(httpParams, schemeRegistry), httpParams);
 	}
 
-	public BaseHttpClient(String baseUrl) {
+	public BaseHttpClient(String baseUrl, int connectionTimeout, int socketTimeout) {
 		this();
 		setBaseUrl(baseUrl);
-	}
-
-	public BaseHttpClient(String baseUrl, int connectionTimeout, int socketTimeout) {
-		this(baseUrl);
 		setConnectionTimeout(connectionTimeout);
 		setSocketTimeout(socketTimeout);
 	}

@@ -20,10 +20,6 @@ public class GrowthbeatHttpClient extends BaseHttpClient {
 		super();
 	}
 
-	public GrowthbeatHttpClient(String baseUrl) {
-		super(baseUrl);
-	}
-
 	public GrowthbeatHttpClient(String baseUrl, int connectionTimeout, int socketTimeout) {
 		super(baseUrl, connectionTimeout, socketTimeout);
 	}
